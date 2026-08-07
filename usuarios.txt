@@ -1,0 +1,2 @@
+admin,123456,0,administrador,sucursal 1,adminS1@gmail.com
+empleado,123456,1,empleado 1,sucursal 1,emp1@gmail.com
