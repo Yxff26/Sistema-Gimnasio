@@ -1,0 +1,6 @@
+1,Pendiente,1
+2,Confirmado,1
+3,En Proceso,1
+4,Completado,1
+5,Cancelado,1
+6,No Presentado,1

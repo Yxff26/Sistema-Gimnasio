@@ -46,9 +46,22 @@ public class FrmMantUsuario extends javax.swing.JFrame {
 
     private void aplicarEstadoInicial() {
         btnGuardar.setEnabled(false);
-        btnLimpiarCampos.setEnabled(false);
+        btnLimpiarCampos.setEnabled(true); // Cambiado a true para que siempre se pueda reiniciar la vista
         btnEliminar.setEnabled(false);
+
+        // Bloquear campos de edición hasta validar un Login
+        setCamposHabilitados(false);
+
         esNuevoUsuario = true;
+    }
+    
+    private void setCamposHabilitados(boolean habilitar) {
+        txtPassword.setEnabled(habilitar);
+        txtNombre.setEnabled(habilitar);
+        txtApellidos.setEnabled(habilitar);
+        txtCorreo.setEnabled(habilitar);
+        rbAdministrador.setEnabled(habilitar);
+        rbSocio.setEnabled(habilitar);
     }
 
     /**
@@ -149,6 +162,11 @@ public class FrmMantUsuario extends javax.swing.JFrame {
 
         btnEliminar.setBackground(new java.awt.Color(204, 0, 0));
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -272,11 +290,18 @@ public class FrmMantUsuario extends javax.swing.JFrame {
             return;
         }
 
+        if (!correo.isEmpty()) {
+            String regexCorreo = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+            if (!correo.matches(regexCorreo)) {
+                JOptionPane.showMessageDialog(this, "El formato del correo es inválido.\nEjemplo correcto: usuario@correo.com", "Formato Incorrecto", JOptionPane.WARNING_MESSAGE);
+                txtCorreo.requestFocus();
+                return;
+            }
+        }
+
         File archivo = new File("usuarios.txt");
         List<String> lineasArchivo = new ArrayList<>();
-        boolean usuarioModificado = false;
 
-        // Si el archivo existe, leemos todo para actualizar o verificar duplicados
         if (archivo.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
                 String linea;
@@ -284,11 +309,9 @@ public class FrmMantUsuario extends javax.swing.JFrame {
                     String[] datos = linea.split(",", -1);
                     if (datos.length > 0 && datos[0].trim().equalsIgnoreCase(login)) {
                         if (!esNuevoUsuario) {
-                            // Reemplazamos con los nuevos datos
-                            lineasArchivo.add(login + "," + pass + "," + nivel + "," + nombre + "," + apellidos + "," + correo);
-                            usuarioModificado = true;
+                            // Reemplazamos guardando con estado activo (1)
+                            lineasArchivo.add(login + "," + pass + "," + nivel + "," + nombre + "," + apellidos + "," + correo + ",1");
                         }
-                        // Si es nuevo y ya existe, evitamos duplicar
                     } else {
                         lineasArchivo.add(linea);
                     }
@@ -299,18 +322,18 @@ public class FrmMantUsuario extends javax.swing.JFrame {
         }
 
         if (esNuevoUsuario) {
-            // Validar si ya existe antes de agregar
+            // Validar si ya existe en el archivo (sea activo '1' o eliminado '0')
             for (String l : lineasArchivo) {
-                if (l.startsWith(login + ",")) {
-                    JOptionPane.showMessageDialog(this, "El nombre de usuario ya está registrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                String[] datos = l.split(",", -1);
+                if (datos.length > 0 && datos[0].trim().equalsIgnoreCase(login)) {
+                    JOptionPane.showMessageDialog(this, "El nombre de usuario ya existe en el sistema (activo o eliminado). No se puede duplicar.", "Error de Registro", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
-            // Agregar nuevo registro al final
-            lineasArchivo.add(login + "," + pass + "," + nivel + "," + nombre + "," + apellidos + "," + correo);
+            // Si no existe, agregamos con estado activo (1)
+            lineasArchivo.add(login + "," + pass + "," + nivel + "," + nombre + "," + apellidos + "," + correo + ",1");
         }
 
-        // Sobrescribir el archivo completo con los cambios
         try (PrintWriter pw = new PrintWriter(new FileWriter(archivo))) {
             for (String l : lineasArchivo) {
                 pw.println(l);
@@ -324,12 +347,16 @@ public class FrmMantUsuario extends javax.swing.JFrame {
 
     private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
         String login = txtLogin.getText().trim();
-        if (login.isEmpty()) return;
+        if (login.isEmpty()) {
+            setCamposHabilitados(false);
+            return;
+        }
 
         File archivo = new File("usuarios.txt");
         boolean encontrado = false;
         String pass = "", nombre = "", apellidos = "", correo = "";
         int nivel = 1;
+        String estado = "1"; // 1 = Activo por defecto
 
         if (archivo.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
@@ -343,6 +370,8 @@ public class FrmMantUsuario extends javax.swing.JFrame {
                         nombre = datos[3].trim();
                         apellidos = datos[4].trim();
                         correo = datos[5].trim();
+                        // Si existe la posición 6 tomamos el estado, de lo contrario asumimos activo "1"
+                        estado = datos.length >= 7 ? datos[6].trim() : "1";
                         break;
                     }
                 }
@@ -352,16 +381,28 @@ public class FrmMantUsuario extends javax.swing.JFrame {
         }
 
         if (!encontrado) {
-            JOptionPane.showMessageDialog(this, "El usuario es NUEVO y se está creando.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Creando nuevo usuario...", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             esNuevoUsuario = true;
+
+            // Desbloquear campos para escritura
+            setCamposHabilitados(true);
+
             btnGuardar.setEnabled(true);
             btnLimpiarCampos.setEnabled(true);
             btnEliminar.setEnabled(false);
+
             txtPassword.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "El usuario ya EXISTE y se está modificando.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            // Verificar si el usuario está borrado lógicamente
+            if (estado.equals("0")) {
+                JOptionPane.showMessageDialog(this, "El usuario se encuentra ELIMINADO/INACTIVO en el sistema.\nNo es posible editarlo ni crearlo nuevamente.", "Usuario Inactivo", JOptionPane.ERROR_MESSAGE);
+                limpiarCampos();
+                return;
+            }
+
+            JOptionPane.showMessageDialog(this, "Modificando usuario existente...", "Aviso", JOptionPane.WARNING_MESSAGE);
             esNuevoUsuario = false;
-            
+
             // Cargar datos en pantalla
             txtPassword.setText(pass);
             txtNombre.setText(nombre);
@@ -373,15 +414,76 @@ public class FrmMantUsuario extends javax.swing.JFrame {
                 rbSocio.setSelected(true);
             }
 
-            btnGuardar.setEnabled(true); // O puedes activarlo solo si edita
+            // Desbloquear campos para edición
+            setCamposHabilitados(true);
+
+            btnGuardar.setEnabled(true);
             btnLimpiarCampos.setEnabled(true);
             btnEliminar.setEnabled(true);
+
+            txtPassword.requestFocus();
         }
     }//GEN-LAST:event_txtLoginActionPerformed
 
     private void btnLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCamposActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnLimpiarCamposActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        String login = txtLogin.getText().trim();
+        if (login.isEmpty()) return;
+
+        int confirm = JOptionPane.showConfirmDialog(
+            this, 
+            "¿Está seguro de que desea eliminar al usuario '" + login + "'?\n(El usuario será desactivado del sistema)", 
+            "Confirmar Eliminación", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        File archivo = new File("usuarios.txt");
+        List<String> lineasArchivo = new ArrayList<>();
+        boolean encontrado = false;
+
+        if (archivo.exists()) {
+            try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    String[] datos = linea.split(",", -1);
+                    if (datos.length > 0 && datos[0].trim().equalsIgnoreCase(login)) {
+                        String pass = datos.length > 1 ? datos[1].trim() : "";
+                        String nivel = datos.length > 2 ? datos[2].trim() : "1";
+                        String nombre = datos.length > 3 ? datos[3].trim() : "";
+                        String apellidos = datos.length > 4 ? datos[4].trim() : "";
+                        String correo = datos.length > 5 ? datos[5].trim() : "";
+                        
+                        // Reescribimos la línea estableciendo el estado en 0 (Inactivo / Borrado lógico)
+                        lineasArchivo.add(login + "," + pass + "," + nivel + "," + nombre + "," + apellidos + "," + correo + ",0");
+                        encontrado = true;
+                    } else {
+                        lineasArchivo.add(linea);
+                    }
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al leer archivo: " + e.getMessage());
+                return;
+            }
+        }
+
+        if (encontrado) {
+            try (PrintWriter pw = new PrintWriter(new FileWriter(archivo))) {
+                for (String l : lineasArchivo) {
+                    pw.println(l);
+                }
+                JOptionPane.showMessageDialog(this, "Usuario eliminado del sistema correctamente.");
+                limpiarCampos();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al actualizar el archivo: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void limpiarCampos() {
         txtLogin.setText("");

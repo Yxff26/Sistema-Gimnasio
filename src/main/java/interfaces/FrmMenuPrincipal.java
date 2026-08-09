@@ -25,6 +25,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Menú Principal - Sistema");
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         // Aplicar control de accesos según el rol
         aplicarRestricciones();
@@ -36,6 +37,10 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
             // Si NO es Administrador, bloqueamos el módulo de mantenimiento de usuarios
             btnMantenimientoUsuarios.setEnabled(false);
             btnMantenimientoUsuarios.setToolTipText("Acceso restringido: Solo para Administradores");
+            btnGenerarCobro.setEnabled(false);
+            btnGenerarCobro.setToolTipText("Acceso restringido: Solo para Administradores");
+            btnActualizarCuota.setEnabled(false);
+            btnActualizarCuota.setToolTipText("Acceso restringido: Solo para Administradores");
         }
     }                                                     
 
@@ -51,20 +56,20 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         btnMantenimientoUsuarios = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
-        jMenuItem10 = new javax.swing.JMenuItem();
+        btnMantenimientoEntrenadores = new javax.swing.JMenuItem();
+        btnMantenimientoLocalizacion = new javax.swing.JMenuItem();
+        btnMantenimientoSalas = new javax.swing.JMenuItem();
+        btnMantenimientoActividades = new javax.swing.JMenuItem();
+        btnMantenimientoHActividades = new javax.swing.JMenuItem();
+        btnMantenimientoClientes = new javax.swing.JMenuItem();
+        btnMantenimientoEReservas = new javax.swing.JMenuItem();
+        btnMantenimientoReservas = new javax.swing.JMenuItem();
+        btnMantenimientoRActividades = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem12 = new javax.swing.JMenuItem();
-        jMenuItem13 = new javax.swing.JMenuItem();
+        btnGenerarCobro = new javax.swing.JMenuItem();
+        btnActualizarCuota = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem14 = new javax.swing.JMenuItem();
         jMenuItem15 = new javax.swing.JMenuItem();
@@ -93,32 +98,77 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(btnMantenimientoUsuarios);
 
-        jMenuItem2.setText("Entrenador");
-        jMenu1.add(jMenuItem2);
+        btnMantenimientoEntrenadores.setText("Entrenador");
+        btnMantenimientoEntrenadores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoEntrenadoresActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoEntrenadores);
 
-        jMenuItem3.setText("Localización");
-        jMenu1.add(jMenuItem3);
+        btnMantenimientoLocalizacion.setText("Localización");
+        btnMantenimientoLocalizacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoLocalizacionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoLocalizacion);
 
-        jMenuItem4.setText("Salas");
-        jMenu1.add(jMenuItem4);
+        btnMantenimientoSalas.setText("Salas");
+        btnMantenimientoSalas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoSalasActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoSalas);
 
-        jMenuItem5.setText("Actividades");
-        jMenu1.add(jMenuItem5);
+        btnMantenimientoActividades.setText("Actividades");
+        btnMantenimientoActividades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoActividadesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoActividades);
 
-        jMenuItem6.setText("Horarios de Actividades");
-        jMenu1.add(jMenuItem6);
+        btnMantenimientoHActividades.setText("Horarios de Actividades");
+        btnMantenimientoHActividades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoHActividadesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoHActividades);
 
-        jMenuItem7.setText("Clientes");
-        jMenu1.add(jMenuItem7);
+        btnMantenimientoClientes.setText("Clientes");
+        btnMantenimientoClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoClientesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoClientes);
 
-        jMenuItem8.setText("Estado de Reservas");
-        jMenu1.add(jMenuItem8);
+        btnMantenimientoEReservas.setText("Estado de Reservas");
+        btnMantenimientoEReservas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoEReservasActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoEReservas);
 
-        jMenuItem9.setText("Reservas");
-        jMenu1.add(jMenuItem9);
+        btnMantenimientoReservas.setText("Reservas");
+        btnMantenimientoReservas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoReservasActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoReservas);
 
-        jMenuItem10.setText("Reserva de Actividades");
-        jMenu1.add(jMenuItem10);
+        btnMantenimientoRActividades.setText("Reserva de Actividades");
+        btnMantenimientoRActividades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoRActividadesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnMantenimientoRActividades);
 
         jMenuBar1.add(jMenu1);
 
@@ -131,11 +181,11 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
 
         jMenu3.setText("Procesos");
 
-        jMenuItem12.setText("Generar Cobro");
-        jMenu3.add(jMenuItem12);
+        btnGenerarCobro.setText("Generar Cobro");
+        jMenu3.add(btnGenerarCobro);
 
-        jMenuItem13.setText("Actualiza Cuota");
-        jMenu3.add(jMenuItem13);
+        btnActualizarCuota.setText("Actualiza Cuota");
+        jMenu3.add(btnActualizarCuota);
 
         jMenuBar1.add(jMenu3);
 
@@ -238,6 +288,51 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    private void btnMantenimientoEntrenadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoEntrenadoresActionPerformed
+        new FrmMantEntrenador().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoEntrenadoresActionPerformed
+
+    private void btnMantenimientoLocalizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoLocalizacionActionPerformed
+        new FrmMantLocalizacion().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoLocalizacionActionPerformed
+
+    private void btnMantenimientoSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoSalasActionPerformed
+        new FrmMantSala().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoSalasActionPerformed
+
+    private void btnMantenimientoActividadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoActividadesActionPerformed
+        new FrmMantActividad().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoActividadesActionPerformed
+
+    private void btnMantenimientoHActividadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoHActividadesActionPerformed
+        new FrmMantHorarioActividad().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoHActividadesActionPerformed
+
+    private void btnMantenimientoEReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoEReservasActionPerformed
+        new FrmMantEstadoReserva().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoEReservasActionPerformed
+
+    private void btnMantenimientoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoClientesActionPerformed
+        new FrmMantCliente().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoClientesActionPerformed
+
+    private void btnMantenimientoReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoReservasActionPerformed
+        new FrmMantReserva().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoReservasActionPerformed
+
+    private void btnMantenimientoRActividadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoRActividadesActionPerformed
+        new FrmMantReservaActividades().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMantenimientoRActividadesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -274,37 +369,37 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem btnActualizarCuota;
     private javax.swing.JMenuItem btnCerrarSesion;
+    private javax.swing.JMenuItem btnGenerarCobro;
     private javax.swing.JMenu btnM;
+    private javax.swing.JMenuItem btnMantenimientoActividades;
+    private javax.swing.JMenuItem btnMantenimientoClientes;
+    private javax.swing.JMenuItem btnMantenimientoEReservas;
+    private javax.swing.JMenuItem btnMantenimientoEntrenadores;
+    private javax.swing.JMenuItem btnMantenimientoHActividades;
+    private javax.swing.JMenuItem btnMantenimientoLocalizacion;
+    private javax.swing.JMenuItem btnMantenimientoRActividades;
+    private javax.swing.JMenuItem btnMantenimientoReservas;
+    private javax.swing.JMenuItem btnMantenimientoSalas;
     private javax.swing.JMenuItem btnMantenimientoUsuarios;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem19;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem23;
     private javax.swing.JMenuItem jMenuItem24;
     private javax.swing.JMenuItem jMenuItem25;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
     // End of variables declaration//GEN-END:variables
 }

@@ -50,40 +50,60 @@ public class FrmLogin extends javax.swing.JFrame {
         }
 
         boolean encontrado = false;
+        boolean inactivo = false;
+
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                // Estructura esperada en el txt: login,password,nivelAcceso,nombre,apellidos,correo
+                // Estructura esperada en el txt: login,password,nivelAcceso,nombre,apellidos,correo,estado
                 String[] datos = linea.split(",", -1);
                 
                 if (datos.length >= 3) {
                     String loginArchivo = datos[0].trim();
                     String passArchivo = datos[1].trim();
                     int nivelAcceso = Integer.parseInt(datos[2].trim());
+                    
+                    // Verificamos si existe la columna de estado (índice 6). Si no existe, asumimos que es 1 (activo)
+                    String estado = (datos.length >= 7) ? datos[6].trim() : "1";
 
+                    // Si el usuario y contraseña coinciden
                     if (loginArchivo.equalsIgnoreCase(usuario) && passArchivo.equals(password)) {
                         encontrado = true;
                         
+                        // Revisamos si el usuario fue eliminado lógicamente
+                        if (estado.equals("0")) {
+                            inactivo = true;
+                            break; // Rompemos el ciclo porque lo encontramos, pero está inactivo
+                        }
+                        
+                        // Si el usuario está activo (1) le damos acceso
                         JOptionPane.showMessageDialog(this, "¡Bienvenido, " + loginArchivo + "!", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
                         
                         // Abrir el Menú Principal pasando el nivel de acceso (0 = Admin, 1 = Socio/Normal)
                         new FrmMenuPrincipal(nivelAcceso).setVisible(true);
                         this.dispose(); // Cerrar ventana de login
-                        break;
+                        return; // Termina la ejecución aquí para no mostrar los mensajes de error
                     }
                 }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(), "Error Crítico", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        if (!encontrado) {
+        // Si la variable inactivo cambió a true, mostramos alerta de cuenta deshabilitada
+        if (inactivo) {
+            JOptionPane.showMessageDialog(this, "Esta cuenta se encuentra deshabilitada o ha sido eliminada del sistema.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+            txtPassword.setText("");
+            txtUsuario.requestFocus();
+        } 
+        // Si no se encontró el usuario o la contraseña es incorrecta
+        else if (!encontrado) {
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
             txtPassword.setText("");
             txtUsuario.requestFocus();
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
