@@ -96,10 +96,13 @@
             <Property name="text" type="java.lang.String" value="Movimientos"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem11">
+            <MenuItem class="javax.swing.JMenuItem" name="btnMoviCuotas">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cuotas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoviCuotasActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -112,11 +115,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Generar Cobro"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarCobroActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="btnActualizarCuota">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Actualiza Cuota"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarCuotaActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

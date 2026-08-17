@@ -66,7 +66,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         btnMantenimientoReservas = new javax.swing.JMenuItem();
         btnMantenimientoRActividades = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem11 = new javax.swing.JMenuItem();
+        btnMoviCuotas = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         btnGenerarCobro = new javax.swing.JMenuItem();
         btnActualizarCuota = new javax.swing.JMenuItem();
@@ -174,17 +174,32 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
 
         jMenu2.setText("Movimientos");
 
-        jMenuItem11.setText("Cuotas");
-        jMenu2.add(jMenuItem11);
+        btnMoviCuotas.setText("Cuotas");
+        btnMoviCuotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoviCuotasActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btnMoviCuotas);
 
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Procesos");
 
         btnGenerarCobro.setText("Generar Cobro");
+        btnGenerarCobro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarCobroActionPerformed(evt);
+            }
+        });
         jMenu3.add(btnGenerarCobro);
 
         btnActualizarCuota.setText("Actualiza Cuota");
+        btnActualizarCuota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarCuotaActionPerformed(evt);
+            }
+        });
         jMenu3.add(btnActualizarCuota);
 
         jMenuBar1.add(jMenu3);
@@ -333,6 +348,21 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnMantenimientoRActividadesActionPerformed
 
+    private void btnGenerarCobroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarCobroActionPerformed
+        new FrmGenCobro().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnGenerarCobroActionPerformed
+
+    private void btnActualizarCuotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarCuotaActionPerformed
+        new FrmActCuota().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnActualizarCuotaActionPerformed
+
+    private void btnMoviCuotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoviCuotasActionPerformed
+        new FrmMovimientoCuota().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMoviCuotasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -383,12 +413,12 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnMantenimientoReservas;
     private javax.swing.JMenuItem btnMantenimientoSalas;
     private javax.swing.JMenuItem btnMantenimientoUsuarios;
+    private javax.swing.JMenuItem btnMoviCuotas;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
