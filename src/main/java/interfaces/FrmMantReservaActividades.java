@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+
+
 /**
  *
  * @author yefry
@@ -126,6 +132,32 @@ public class FrmMantReservaActividades extends javax.swing.JFrame {
             }
         });
     }
+    
+        private void aplicarFiltrosNumericos() {
+        // Filtro 1: Solo números enteros (para Código de Cuota y Código de Cliente)
+        DocumentFilter filtroEnteros = new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null && text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        };
+
+        // Aplicar Filtro 1 a los campos de códigos
+        ((AbstractDocument) txtIdReservaAct.getDocument()).setDocumentFilter(filtroEnteros);
+        ((AbstractDocument) txtIdCliente.getDocument()).setDocumentFilter(filtroEnteros);
+        ((AbstractDocument) txtIdEstReservaAct.getDocument()).setDocumentFilter(filtroEnteros);
+        ((AbstractDocument) txtIdActividad.getDocument()).setDocumentFilter(filtroEnteros);
+        ((AbstractDocument) txtIdResHorAct.getDocument()).setDocumentFilter(filtroEnteros);
+    }
+
 
     /**
      * Creates new form FrmMantReservaActividades
@@ -133,6 +165,7 @@ public class FrmMantReservaActividades extends javax.swing.JFrame {
     public FrmMantReservaActividades() {
         initComponents();
         setLocationRelativeTo(null);
+        aplicarFiltrosNumericos(); 
         setTitle("Mantenimiento de Reservas Actividades");
 
         // --- MAGIA DE FLATLAF: PLACEHOLDERS ---

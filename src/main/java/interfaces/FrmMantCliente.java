@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -58,6 +62,26 @@ public class FrmMantCliente extends javax.swing.JFrame {
         aplicarEstadoInicial();
     }
     
+    private void limpiarDatosCliente() {
+    txtNombre.setText("");
+    txtApPat.setText("");
+    txtApMat.setText("");
+    txtDireccion.setText("");
+    jdFechaNac.setDate(null);
+    txtTelefono.setText("");
+    txtCelular.setText("");
+    
+    cbStatus.setSelectedIndex(0);
+    cbTipo.setSelectedIndex(0);
+    
+    txtCorreo.setText("");
+    txtCuota.setText("");
+    
+    // Valores automáticos/default
+    txtFechaIngreso.setText(formatoFecha.format(new Date()));
+    txtBalance.setText("0.0");
+    }
+    
     private void setCamposHabilitados(boolean habilitar) {
     txtNombre.setEnabled(habilitar);
     txtApPat.setEnabled(habilitar);
@@ -71,6 +95,28 @@ public class FrmMantCliente extends javax.swing.JFrame {
     txtCorreo.setEnabled(habilitar);
     txtCuota.setEnabled(habilitar);
     }
+    
+    private void aplicarFiltrosNumericos() {
+        // Filtro 1: Solo números enteros (para Código de Cuota y Código de Cliente)
+        DocumentFilter filtroEnteros = new DocumentFilter() {
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null && text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        };
+
+        // Aplicar Filtro 1 a los campos de códigos
+        ((AbstractDocument) txtIdCliente.getDocument()).setDocumentFilter(filtroEnteros);
+    }
+
 
     /**
      * Creates new form FrmMantCliente
@@ -78,6 +124,7 @@ public class FrmMantCliente extends javax.swing.JFrame {
     public FrmMantCliente() {
         initComponents();
         setLocationRelativeTo(null);
+        aplicarFiltrosNumericos(); 
         setTitle("Mantenimiento de Cliente");
         
         // --- MAGIA DE FLATLAF: PLACEHOLDERS ---
@@ -599,8 +646,18 @@ public class FrmMantCliente extends javax.swing.JFrame {
         }
 
         if (!encontrado) {
-            JOptionPane.showMessageDialog(this, "El cliente no existe. Ingrese los datos para registrarlo.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                "El cliente no existe. Ingrese los datos para registrarlo.",
+                "Aviso",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+
             esNuevoCliente = true;
+
+            // Limpiar los datos del cliente anterior,
+            // pero conservar el nuevo ID escrito
+            limpiarDatosCliente();
 
             // Habilitar campos y botones para nuevo registro
             setCamposHabilitados(true);

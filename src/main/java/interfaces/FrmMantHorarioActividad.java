@@ -8,6 +8,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 /**
  *
  * @author yefry
@@ -43,11 +47,35 @@ public class FrmMantHorarioActividad extends javax.swing.JFrame {
         txtHoraAct.setEnabled(habilitar);
         txtIdActividad.setEnabled(habilitar);
     }
+    
+    private void aplicarFiltrosNumericos() {
+        // Filtro 1: Solo números enteros (para Código de Cuota y Código de Cliente)
+        DocumentFilter filtroEnteros = new DocumentFilter() {
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null && text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        };
+
+        // Aplicar Filtro 1 a los campos de códigos
+        ((AbstractDocument) txtIdHorarioAct.getDocument()).setDocumentFilter(filtroEnteros);
+        ((AbstractDocument) txtIdActividad.getDocument()).setDocumentFilter(filtroEnteros);
+    }
+
 
     // Constructor de la ventana
     public FrmMantHorarioActividad() {
         initComponents();
         setLocationRelativeTo(null);
+        aplicarFiltrosNumericos(); 
         setTitle("Mantenimiento de Horarios Actividades");
         
         // --- MAGIA DE FLATLAF: PLACEHOLDERS ---

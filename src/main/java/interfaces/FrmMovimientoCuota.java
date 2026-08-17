@@ -11,6 +11,10 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 public class FrmMovimientoCuota extends javax.swing.JFrame {
 
@@ -22,7 +26,60 @@ public class FrmMovimientoCuota extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         modeloTabla = (DefaultTableModel) tblCobros.getModel();
+        
+        // ¡NUEVA LÍNEA AGREGADA AQUÍ!
+        aplicarFiltrosNumericos(); 
+        
         aplicarEstadoInicial();
+    }
+    
+    private void aplicarFiltrosNumericos() {
+        // Filtro 1: Solo números enteros (para Código de Cuota y Código de Cliente)
+        DocumentFilter filtroEnteros = new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null && text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        };
+
+        // Aplicar Filtro 1 a los campos de códigos
+        ((AbstractDocument) txtCodCuota.getDocument()).setDocumentFilter(filtroEnteros);
+        ((AbstractDocument) txtCodCliente.getDocument()).setDocumentFilter(filtroEnteros);
+
+        // Filtro 2: Números con soporte para punto decimal (para Valor a Pagar)
+        DocumentFilter filtroDecimales = new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null) {
+                    String currentText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                    String newText = currentText.substring(0, offset) + string + currentText.substring(offset);
+                    if (newText.matches("\\d*(\\.\\d*)?")) {
+                        super.insertString(fb, offset, string, attr);
+                    }
+                }
+            }
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null) {
+                    String currentText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                    String newText = currentText.substring(0, offset) + text + currentText.substring(offset + length);
+                    if (newText.matches("\\d*(\\.\\d*)?")) {
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                }
+            }
+        };
+
+        // Aplicar Filtro 2 al campo de dinero
+        ((AbstractDocument) txtTotalCuota.getDocument()).setDocumentFilter(filtroDecimales);
     }
 
     private void aplicarEstadoInicial() {

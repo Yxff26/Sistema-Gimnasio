@@ -8,6 +8,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 /**
  *
  * @author yefry
@@ -45,6 +49,28 @@ public class FrmMantEntrenador extends javax.swing.JFrame {
         txtTelefono.setEnabled(habilitar);
         txtCorreo.setEnabled(habilitar);
     }   
+    
+    private void aplicarFiltrosNumericos() {
+        // Filtro 1: Solo números enteros (para Código de Cuota y Código de Cliente)
+        DocumentFilter filtroEnteros = new DocumentFilter() {
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null && text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        };
+
+        // Aplicar Filtro 1 a los campos de códigos
+        ((AbstractDocument) txtId.getDocument()).setDocumentFilter(filtroEnteros);
+    }
+
 
     /**
      * Creates new form FrmMantEntrenador
@@ -52,6 +78,7 @@ public class FrmMantEntrenador extends javax.swing.JFrame {
     public FrmMantEntrenador() {
         initComponents();
         setLocationRelativeTo(null);
+        aplicarFiltrosNumericos();
         setTitle("Mantenimiento de Entrenador");
         
         // --- MAGIA DE FLATLAF: PLACEHOLDERS ---

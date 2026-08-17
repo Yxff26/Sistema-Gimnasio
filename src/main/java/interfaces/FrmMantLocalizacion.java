@@ -8,6 +8,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 /**
  *
  * @author yefry
@@ -39,11 +43,34 @@ public class FrmMantLocalizacion extends javax.swing.JFrame {
     private void setCamposHabilitados(boolean habilitar) {
         txtTipo.setEnabled(habilitar);
     }
+    
+    private void aplicarFiltrosNumericos() {
+        // Filtro 1: Solo números enteros (para Código de Cuota y Código de Cliente)
+        DocumentFilter filtroEnteros = new DocumentFilter() {
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null && text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        };
+
+        // Aplicar Filtro 1 a los campos de códigos
+        ((AbstractDocument) txtId.getDocument()).setDocumentFilter(filtroEnteros);
+    }
+
 
     // Constructor de la ventana
     public FrmMantLocalizacion() {
         initComponents();
         setLocationRelativeTo(null);
+        aplicarFiltrosNumericos(); 
         setTitle("Mantenimiento de Localización");
         
         // --- MAGIA DE FLATLAF: PLACEHOLDERS ---
