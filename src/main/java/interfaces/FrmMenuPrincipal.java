@@ -71,7 +71,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         btnGenerarCobro = new javax.swing.JMenuItem();
         btnActualizarCuota = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItem14 = new javax.swing.JMenuItem();
+        btnConUsuarios = new javax.swing.JMenuItem();
         jMenuItem15 = new javax.swing.JMenuItem();
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
@@ -206,8 +206,13 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
 
         jMenu4.setText("Consultas");
 
-        jMenuItem14.setText("Usuarios");
-        jMenu4.add(jMenuItem14);
+        btnConUsuarios.setText("Usuarios");
+        btnConUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConUsuariosActionPerformed(evt);
+            }
+        });
+        jMenu4.add(btnConUsuarios);
 
         jMenuItem15.setText("Entrenador");
         jMenu4.add(jMenuItem15);
@@ -363,6 +368,11 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnMoviCuotasActionPerformed
 
+    private void btnConUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConUsuariosActionPerformed
+        new FrmConsultaUsuarios().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnConUsuariosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -401,6 +411,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnActualizarCuota;
     private javax.swing.JMenuItem btnCerrarSesion;
+    private javax.swing.JMenuItem btnConUsuarios;
     private javax.swing.JMenuItem btnGenerarCobro;
     private javax.swing.JMenu btnM;
     private javax.swing.JMenuItem btnMantenimientoActividades;
@@ -419,7 +430,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;

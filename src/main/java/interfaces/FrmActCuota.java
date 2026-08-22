@@ -84,7 +84,13 @@ public class FrmActCuota extends javax.swing.JFrame {
 
         jLabel31.setText("Fecha Inicial *");
 
+        dateFechaInicial.setBackground(new java.awt.Color(51, 51, 51));
+        dateFechaInicial.setForeground(new java.awt.Color(255, 255, 255));
+
         jLabel32.setText("Fecha Final *");
+
+        dateFechaFinal.setBackground(new java.awt.Color(51, 51, 51));
+        dateFechaFinal.setForeground(new java.awt.Color(255, 255, 255));
 
         btnProcesar.setBackground(new java.awt.Color(0, 153, 0));
         btnProcesar.setText("Procesar");
